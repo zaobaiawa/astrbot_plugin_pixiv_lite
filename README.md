@@ -3,7 +3,7 @@
 # astrbot_plugin_pixiv_lite
 
 Pixiv 插件：查插画、下原图、下小说。所有文字信息都本地渲染成图片，通过 OneBot v11（NapCat 接入 QQ）发送。
-
+大部分代码由AI完成
 
 
 ## 指令
