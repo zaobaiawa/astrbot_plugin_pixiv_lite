@@ -17,13 +17,12 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
-import logging
 import os
 import time
 
 import aiohttp
 
-logger = logging.getLogger("astrbot_plugin_pixiv_lite")
+from astrbot.api import logger
 
 APP_API = "https://app-api.pixiv.net"
 WEB_API = "https://www.pixiv.net"

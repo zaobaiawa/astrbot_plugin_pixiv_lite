@@ -23,8 +23,7 @@ import re
 import time
 from datetime import date, datetime, timedelta
 
-from astrbot import logger
-from astrbot.api import AstrBotConfig
+from astrbot.api import AstrBotConfig, logger
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.message_components import Image, Node, Nodes, Plain
 from astrbot.api.star import Context, Star, StarTools
@@ -79,10 +78,6 @@ def _parse_date(value: str | None) -> date | None:
 
 # 真实字节嗅探出来的格式 -> 文件后缀
 _EXT_BY_FORMAT = {"JPEG": ".jpg", "PNG": ".png", "GIF": ".gif", "WEBP": ".webp", "BMP": ".bmp"}
-
-
-def _plugin_root() -> str:
-    return os.path.dirname(os.path.abspath(__file__))
 
 
 def _is_r18(item: dict, tags: list[str]) -> bool:
@@ -228,11 +223,20 @@ class PixivLite(Star):
 
     # ------------------------------------------------------------------ 初始化
     def _prepare_data_dir(self) -> str:
+        """持久化目录固定为 data/plugin_data/<插件名>，绝不写进插件自身目录。"""
         try:
             base = StarTools.get_data_dir(PLUGIN_NAME)
-            path = os.path.join(str(base), "cache")
-        except Exception:  # 极端情况下退回插件目录
-            path = os.path.join(_plugin_root(), "cache")
+        except Exception as exc:
+            raise RuntimeError(
+                f"拿不到插件数据目录（StarTools.get_data_dir('{PLUGIN_NAME}') 调用失败）。"
+                f"请检查 AstrBot 的 data 目录配置是否正常：{exc}"
+            ) from exc
+        if not base:
+            raise RuntimeError(
+                f"插件数据目录为空（StarTools.get_data_dir('{PLUGIN_NAME}') 返回 None）。"
+                "请检查 AstrBot 的 data 目录配置。"
+            )
+        path = os.path.join(str(base), "cache")
         os.makedirs(path, exist_ok=True)
         return path
 
