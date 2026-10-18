@@ -4,7 +4,7 @@ desc: 轻量 Pixiv 插件：查看/下载插画、下载小说 txt。
 short_desc: /px 与 /novel 指令，查看下载 Pixiv 插画与小说
 help: 输入 /px help 查看用法
 version: v1.0.0
-author: workplace
+author: 皂白awa
 support_platforms:
   - aiocqhttp
 astrbot_version: ">=4.0"
