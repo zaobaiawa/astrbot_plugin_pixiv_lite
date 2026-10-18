@@ -29,7 +29,8 @@
 通过 OneBot v11（NapCat 接入 QQ）发送，不依赖任何在线文转图服务。
 
 > [!NOTE]
-> 大部分代码由 AI 完成。
+> 大部分代码由 AI 完成。有问题请提出。
+> 使用完整功能要求有pixiv plus会员
 
 ## 功能特性
 
@@ -42,7 +43,6 @@
 - **R18 / AI 筛选** — 指令开关，含义是「只要这一类」
 - **长图排版** — 一页搜索结果 / 一屏作品网格，一张图看完
 - **防屏蔽标记** — 给下载的原图点一小块黑像素，绕过 QQ 图片特征屏蔽
-- **自带资源** — 字体与顶图打包在插件内，开箱即用
 
 ## 安装方法
 
@@ -66,9 +66,7 @@ pip install -r requirements.txt
 | `aiohttp>=3.8`    | Pixiv API 请求、图片下载      |
 | `Pillow>=9.0`     | 卡片与长图渲染                |
 
-> [!NOTE]
-> 字体和顶图已经打包在 `resources/` 里（`MaokenZhuyuanTi.ttf` + `top.png`），
-> 不需要额外安装中文字体，也不依赖 `zdy_t2i` 的外部安装。
+
 
 ### 3. 重启 AstrBot
 
@@ -84,8 +82,7 @@ pip install -r requirements.txt
 
 > [!WARNING]
 > `refresh_token` 等同于账号登录态，**不要泄露给任何人**，也不要提交到仓库。
-> 插件只会把它写进日志以外的地方——运行时数据落在
-> `data/plugin_data/astrbot_plugin_pixiv_lite/`，不会写回插件目录。
+
 
 ### 5.（可选）配置代理
 
@@ -230,11 +227,8 @@ http://127.0.0.1:7890
 只发两条消息：
 
 1. **小说信息卡片**（图片）
-2. **txt 文件**（顶层消息，AstrBot 会转成 `file://` 交给 NapCat）
+2. **txt 文件**
 
-不走合并转发，因为 NapCat 发普通文件只认 URL 或本地路径、**不认 base64**，
-而 AstrBot 只在**顶层消息**里把本地路径转成 `file://`——塞进合并转发节点的文件段
-会变成 0 字节空文件。
 
 ### 关于「原图」与 QQ 屏蔽
 
@@ -262,7 +256,7 @@ http://127.0.0.1:7890
 ```
 astrbot_plugin_pixiv_lite/
 ├── main.py              # 插件入口：指令解析、搜索、下载、合并转发
-├── pixiv_api.py         # Pixiv 客户端（OAuth + app-api + 网页接口 + 图片下载 + 字段归一化）
+├── pixiv_api.py         # Pixiv 客户端（OAuth + app-api + 网页接口 + 图片下载）
 ├── long_card.py         # 长图排版：竖排搜索结果 + 横排作者作品网格
 ├── cards.py             # 信息卡 / 头卡 / 翻页卡 / 错误卡 + 字体与折行
 ├── novel_text.py        # 小说正文解析（JSON 段落格式与网页纯文本，含 ruby 注音处理）
@@ -284,9 +278,6 @@ data/plugin_data/astrbot_plugin_pixiv_lite/cache/
 
 ## 常见问题
 
-### Q: 提示「还没配置 refresh_token」？
-
-**A:** 到管理面板「插件配置」里填 `refresh_token`。这是必填项，插件不会从别处读取。
 
 ### Q: 下载的图发不出去 / 群里看不到？
 
@@ -297,11 +288,6 @@ data/plugin_data/astrbot_plugin_pixiv_lite/cache/
 
 **A:** 单次上限 40 张。NapCat 的合并转发最多约 50 个节点，超过会整体发送失败，
 所以默认封顶 40。想要更少就写张数：`/px d 191823184 5`。
-
-### Q: `/novel d` 收到的 txt 是 0 字节？
-
-**A:** 早期版本把文件塞进合并转发节点里，NapCat 不支持 `base64://` 的文件段，
-会变成空文件。现在改成**顶层消息**发 `file://`，已修复。
 
 ### Q: 提示「拿不到插件数据目录」？
 
@@ -331,11 +317,34 @@ data/plugin_data/astrbot_plugin_pixiv_lite/cache/
 
 ## 已知限制
 
-- 动图（ugoira）只发静帧，头卡里会标注。
+- 动图只发静帧，卡里会标注。
 - 搜索最多翻到第 10 页、扫描上限 300 条原始结果。
 - 小说系列文只取当前这一篇的正文。
 - 长图上限 1080×2960，一页最多 20 份。
-- `/px d` 的合并转发需要 OneBot v11（`metadata.yaml` 已声明 `support_platforms: [aiocqhttp]`）。
+
+## 贡献指南
+
+欢迎提交 Pull Request 和 Issue。提交代码时请遵循以下提交消息规范：
+
+### 提交类型
+
+| 类型       | 说明                                     |
+| ---------- | ---------------------------------------- |
+| `feat`     | 新功能                                   |
+| `fix`      | Bug 修复                                 |
+| `docs`     | 文档变更                                 |
+| `style`    | 代码格式调整（空格、分号等，不影响逻辑） |
+| `refactor` | 代码重构（既非新功能也非 Bug 修复）      |
+
+
+
+示例：
+
+```
+feat: 新增加密 ZIP 打包功能
+fix: 修复客户端类型配置错误
+docs: 更新 README 安装说明
+```
 
 ## 注意事项
 
@@ -355,4 +364,3 @@ Copyright (c) 2026 皂白
 - [AstrBot](https://github.com/AstrBotDevs/AstrBot) — 机器人框架
 - [Pillow](https://python-pillow.org/) — 图像处理
 - [aiohttp](https://docs.aiohttp.org/) — 异步 HTTP
-- 猫啃珠圆体（MaokenZhuyuanTi）— 自带字体，OFL 授权

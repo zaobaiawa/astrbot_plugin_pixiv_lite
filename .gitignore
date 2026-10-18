@@ -3,9 +3,3 @@ cache/
 __pycache__/
 *.pyc
 
-# 测试过程中生成的临时产物
-previews/_test/
-previews/_check/
-_live/
-_live_check/
-_fakelib/
