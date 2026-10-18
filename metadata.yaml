@@ -1,0 +1,10 @@
+name: astrbot_plugin_pixiv_lite
+display_name: Pixiv 插画小说
+desc: 轻量 Pixiv 插件：查看/下载插画、下载小说 txt，信息卡由本地 zdy_t2i 渲染成图片，支持合并转发。
+short_desc: /px 与 /novel 指令，查看下载 Pixiv 插画与小说
+help: 输入 /px help 查看用法
+version: v1.0.0
+author: workplace
+support_platforms:
+  - aiocqhttp
+astrbot_version: ">=4.0"

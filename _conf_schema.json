@@ -1,0 +1,101 @@
+{
+  "refresh_token": {
+    "description": "Pixiv refresh_token",
+    "type": "string",
+    "default": "",
+    "secret": true,
+    "obvious_hint": true,
+    "hint": "必填Pixiv 的 refresh_token，获取方法见README。"
+  },
+  "proxy": {
+    "description": "网络代理",
+    "type": "string",
+    "default": "",
+    "hint": "例如 http://127.0.0.1:7890。AstrBot 所在机器不能直连 Pixiv 时必填；留空为直连。"
+  },
+  "timeout": {
+    "description": "单次请求超时（秒）",
+    "type": "int",
+    "default": 20,
+    "slider": {
+      "min": 5,
+      "max": 120,
+      "step": 1
+    }
+  },
+  "bot_name": {
+    "description": "合并转发里的发送者昵称",
+    "type": "string",
+    "default": "",
+    "hint": "留空显示 Pixiv"
+  },
+  "card_color": {
+    "description": "卡片字色",
+    "type": "string",
+    "options": [
+      "彩色（每行不同色）",
+      "纯黑",
+      "单色"
+    ],
+    "default": "彩色（每行不同色）"
+  },
+  "ai_mode": {
+    "description": "AI 作品过滤",
+    "type": "string",
+    "options": [
+      "过滤 AI",
+      "允许 AI"
+    ],
+    "default": "过滤 AI",
+    "hint": "默认过滤掉 AI 生成的作品。只对 /px 生效，小说不做 AI 判断。指令里加 ai 可以临时放行这一个指令。"
+  },
+  "sort": {
+    "description": "搜索排序（/px s、/novel s）",
+    "type": "string",
+    "options": [
+      "近期热门（会员）",
+      "最新"
+    ],
+    "default": "近期热门（会员）",
+    "hint": "近期热门 = Pixiv 官方热门排序 + 时间窗，在窗口内按收藏降序，需要会员；非会员自动降级本地重排（较慢，不推荐）。"
+  },
+  "search_count": {
+    "description": "搜索每页条数",
+    "type": "int",
+    "default": 10,
+    "slider": {
+      "min": 1,
+      "max": 20,
+      "step": 1
+    },
+    "hint": "每页发多少份结果，默认 10。"
+  },
+  "download_concurrency": {
+    "description": "下载并发数",
+    "type": "int",
+    "default": 3,
+    "slider": {
+      "min": 1,
+      "max": 8,
+      "step": 1
+    },
+    "hint": "同时下载几张图。调太大容易被 Pixiv 限流。"
+  },
+  "mark_images": {
+    "description": "给下载的原图加防屏蔽标记",
+    "type": "bool",
+    "default": true,
+    "hint": "开：每张 /px d 的原图右上角点一小块黑像素，改掉图片特征，绕过 QQ 的图片屏蔽。要原图就关，但是容易导致R18图片发不出"
+  },
+  "mark_size": {
+    "description": "标记大小（像素）",
+    "type": "int",
+    "default": 3,
+    "slider": {
+      "min": 1,
+      "max": 8,
+      "step": 1
+    },
+    "hint": "右上角黑点的边长。3 基本看不见；被屏蔽得厉害可以调到 5~8。"
+  }
+}
